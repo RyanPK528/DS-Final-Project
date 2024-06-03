@@ -187,15 +187,26 @@ public class StudentGradingSystem {
     private void searchStudent() {
         System.out.print("Enter student ID or name to search: ");
         String query = scanner.next().toUpperCase();
-
+        long startTime = System.nanoTime(); // Start timer
+        Runtime runtime = Runtime.getRuntime(); // Get the current runtime
+        long usedMemoryBefore = runtime.totalMemory() - runtime.freeMemory(); // Get the used memory before the search
+        boolean studentFound = false;
         for (Student student : students) {
             if (student.id.equals(query) || student.name.equals(query)) {
                 System.out.println(student);
-                return;
+                studentFound = true;
+                break;
             }
         }
-
-        System.out.println("Student not found.");
+        if (!studentFound) {
+            System.out.println("Student not found.");
+        }
+        long endTime = System.nanoTime(); // Stop timer
+        long duration = (endTime - startTime) / 1000000; // Convert to milliseconds
+        long usedMemoryAfter = runtime.totalMemory() - runtime.freeMemory(); // Get the used memory after the search
+        long allocatedMemory = usedMemoryAfter - usedMemoryBefore; // Calculate the allocated memory
+        System.out.println("Time taken to search student: " + duration + " ms");
+        System.out.println("Allocated memory: " + allocatedMemory + " bytes");
     }
 
     // Method to view all students
